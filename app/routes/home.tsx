@@ -259,7 +259,7 @@ export default function Home() {
             <div className="space-y-8">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-100 rounded-full text-sm font-medium text-blue-700">
                 <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                Trusted by 10,000+ students worldwide
+                Your Success is our Primary Mission
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-[1.1] tracking-tight">
