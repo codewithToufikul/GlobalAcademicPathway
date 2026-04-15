@@ -23,6 +23,8 @@ export const links: Route.LinksFunction = () => [
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap",
   },
+  // Favicon
+  { rel: "icon", type: "image/png", href: "/favicon.png" },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -31,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#0d9488" />
+        <meta name="theme-color" content="#2563eb" />
         <meta name="robots" content="index, follow" />
         <Meta />
         <Links />
@@ -45,8 +47,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import BackToTop from "./components/BackToTop";
+
 export default function App() {
-  return <Outlet />;
+  return (
+    <>
+      <Navbar />
+      <main>
+        <Outlet />
+      </main>
+      <Footer />
+      <BackToTop />
+    </>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
