@@ -1,87 +1,54 @@
-# Welcome to React Router!
+# Global Academic Pathway 🌍🎓
 
-A modern, production-ready template for building full-stack React applications using React Router.
+A premium international education consultancy platform built with React Router v7 and Node.js.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## 🚀 Overview
 
-## Features
+The Global Academic Pathway platform is designed to provide a seamless experience for students planning their international education journey. It features a stunning, modern UI, professional branding, and a secure backend for student registrations.
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
-
-## Getting Started
-
-### Installation
-
-Install the dependencies:
+## 📂 Project Structure
 
 ```bash
-npm install
+GAP/
+├── GlobalAcadenicPathway/  # Frontend (React Router v7)
+└── server/                # Backend (Node.js, Express, MongoDB)
 ```
 
-### Development
+## ✨ Key Features
 
-Start the development server with HMR:
+- **Premium UI/UX**: Designed with TailwindCSS, glassmorphism, and custom 3D illustrations.
+- **Multi-Step Registration**: A 5-step interactive journey for student study plans.
+- **Founder Story**: Professional about page featuring Mr. Jashim Uddin Ahmed.
+- **Responsive Design**: Optimized for all devices from mobile to desktop.
+- **Backend Integration**: Secure Node/Express API with MongoDB Mongoose schemas.
 
+## 🛠️ Getting Started
+
+### 1. Frontend Setup
 ```bash
+cd GlobalAcadenicPathway
+npm install
 npm run dev
 ```
+Visit: `http://localhost:5173`
 
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
+### 2. Backend Setup
 ```bash
-npm run build
+cd server
+npm install
+npm run dev
 ```
+Runs on: `http://localhost:5001`
 
-## Deployment
+**Note**: Ensure your local MongoDB instance is running or update the `MONGO_URI` in `server/.env`.
 
-### Docker Deployment
+## 📦 Tech Stack
 
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+- **Frontend**: React Router v7, TailwindCSS, Lucide Icons (via custom components).
+- **Backend**: Node.js, Express.js, MongoDB, Mongoose.
+- **State Management**: React Hooks (useState, useEffect).
+- **Icons**: Custom SVG components in `app/components/Icons.tsx`.
 
 ---
 
-Built with ❤️ using React Router.
+Built for **Global Academic Pathway** Branding.

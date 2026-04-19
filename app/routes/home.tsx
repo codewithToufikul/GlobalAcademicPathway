@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router";
 import type { Route } from "./+types/home";
 import {
   NAV_LINKS,
@@ -175,13 +176,37 @@ function RequirementsModal({ service, onClose }: { service: any; onClose: () => 
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
+interface Event {
+  _id: string;
+  title: string;
+  description: string;
+  date: string;
+  type: string;
+  location: string;
+  image?: string;
+  status: string;
+}
+
 export default function Home() {
+  const [events, setEvents] = useState<Event[]>([]);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [selectedService, setSelectedService] = useState<any>(null);
   const [country, setCountry] = useState("");
-  const [program, setProgram] = useState("");
   const [degree, setDegree] = useState("");
+
   const heroRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const res = await fetch("http://localhost:5001/api/events");
+        const json = await res.json();
+        if (json.success) setEvents(json.data);
+      } catch (err) { console.error("Events fetch failed:", err); }
+    };
+    fetchEvents();
+  }, []);
+
 
   // Scroll-reveal via IntersectionObserver
   useEffect(() => {
@@ -285,87 +310,23 @@ export default function Home() {
                 Expert guidance for studying abroad in the UK, Canada, Australia, USA & more. From university selection to visa approval — we're with you every step of the way.
               </p>
 
-              {/* Search Bar */}
-              {/* <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-3 flex flex-col sm:flex-row gap-3">
-                <select
-                  id="search-country"
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
-                  className="flex-1 px-4 py-3 text-sm text-gray-700 bg-gray-50 rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              <div className="flex flex-col sm:flex-row gap-5 pt-4 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-500">
+                <Link
+                  to="/apply"
+                  className="px-10 py-5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white text-sm font-black uppercase tracking-[0.2em] rounded-2xl shadow-2xl shadow-blue-500/20 hover:scale-105 hover:shadow-blue-500/40 transition-all duration-300 flex items-center justify-center gap-3 group"
                 >
-                  <option value="">🌍 Select Country</option>
-                  <option value="uk">🇬🇧 United Kingdom</option>
-                  <option value="ca">🇨🇦 Canada</option>
-                  <option value="au">🇦🇺 Australia</option>
-                  <option value="us">🇺🇸 United States</option>
-                </select>
-                <select
-                  id="search-program"
-                  value={program}
-                  onChange={(e) => setProgram(e.target.value)}
-                  className="flex-1 px-4 py-3 text-sm text-gray-700 bg-gray-50 rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  Apply Now
+                  <Icons.ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                </Link>
+                <Link
+                  to="/registration"
+                  className="px-10 py-5 bg-white text-[#0f172a] border-2 border-[#0f172a] text-sm font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-[#0f172a] hover:text-white hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3"
                 >
-                  <option value="">📚 Select Program</option>
-                  <option value="cs">Computer Science</option>
-                  <option value="biz">Business & MBA</option>
-                  <option value="eng">Engineering</option>
-                  <option value="med">Medicine</option>
-                  <option value="law">Law</option>
-                </select>
-                <select
-                  id="search-degree"
-                  value={degree}
-                  onChange={(e) => setDegree(e.target.value)}
-                  className="flex-1 px-4 py-3 text-sm text-gray-700 bg-gray-50 rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                >
-                  <option value="">🎓 Degree Level</option>
-                  <option value="bachelor">Bachelor's</option>
-                  <option value="master">Master's</option>
-                  <option value="phd">PhD</option>
-                  <option value="diploma">Diploma</option>
-                </select>
-                <button
-                  id="hero-search-btn"
-                  className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-700 text-white text-sm font-semibold rounded-xl hover:from-blue-700 hover:to-indigo-800 transition-all duration-300 hover:shadow-blue-200 hover:shadow-lg whitespace-nowrap"
-                >
-                  🔍 Search
-                </button>
-              </div> */}
-
-              {/* CTA Buttons */}
-              <div className="flex flex-wrap gap-4">
-                <a
-                  id="hero-apply-btn"
-                  href="#contact"
-                  className="px-7 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-semibold rounded-xl shadow-sm hover:shadow-blue-200 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm"
-                >
-                  Apply Now →
-                </a>
-                <a
-                  id="hero-consultation-btn"
-                  href="#contact"
-                  className="px-7 py-3.5 border-2 border-blue-200 text-blue-700 font-semibold rounded-xl hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 text-sm"
-                >
-                  📞 Book Consultation
-                </a>
+                  <Icons.Phone size={18} />
+                  Book Consultation
+                </Link>
               </div>
 
-              {/* Stats */}
-              {/* <div className="flex flex-wrap gap-6 pt-2">
-                {[
-                  { val: "10K+", label: "Students Placed" },
-                  { val: "98%", label: "Visa Success Rate" },
-                  { val: "50+", label: "Countries" },
-                  { val: "500+", label: "University Partners" },
-                ].map((s) => (
-                  <div key={s.label} className="text-center">
-                    <div className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-700">
-                      {s.val}
-                    </div>
-                    <div className="text-xs text-gray-500 mt-0.5 font-medium">{s.label}</div>
-                  </div>
-                ))}
-              </div> */}
             </div>
 
             {/* Right: Illustration */}
@@ -502,12 +463,12 @@ export default function Home() {
                 </div>
 
                 <div className="pt-4 flex flex-col sm:flex-row gap-4">
-                  <a
-                    href="#contact"
+                  <Link
+                    to="/apply"
                     className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-blue-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-center"
                   >
                     Check Your Eligibility
-                  </a>
+                  </Link>
                   <a
                     href="/universities"
                     className="px-8 py-4 bg-white text-gray-700 border border-gray-200 font-bold rounded-xl hover:bg-gray-50 transition-all duration-300 text-center"
@@ -619,13 +580,13 @@ export default function Home() {
           </div>
 
           <div className="mt-14 text-center">
-            <a
+            <Link
               id="how-it-works-cta"
-              href="#contact"
+              to="/apply"
               className="inline-block px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-semibold rounded-xl shadow-sm hover:shadow-blue-200 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
             >
               Start Your Journey Today →
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -687,8 +648,142 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ───────────────────────────────────────────────── */}
+      {/* ── FOUNDER'S MESSAGE ─────────────────────────────────────────── */}
+      <section className="reveal section-hidden py-24 bg-white relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-12 gap-12 lg:gap-24 items-center">
+            {/* Image Side */}
+            <div className="lg:col-span-5 relative group">
+              <div className="absolute -inset-4 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-[3rem] blur-2xl opacity-10 group-hover:opacity-20 transition duration-700" />
+              <div className="relative rounded-[3rem] overflow-hidden shadow-2xl shadow-blue-900/10">
+                <img
+                  src="/image.jpeg"
+                  alt="Mr. Jashim Uddin Ahmed"
+                  className="w-full h-[600px] object-cover transition-transform duration-1000 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-transparent opacity-40" />
+                <div className="absolute bottom-8 left-8 text-white">
+                  <h4 className="text-2xl font-black">Mr. Jashim Uddin Ahmed</h4>
+                  <p className="text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] mt-1">Founding Director</p>
+                </div>
+              </div>
+            </div>
 
+            {/* Text Side */}
+            <div className="lg:col-span-7 space-y-8">
+              <div>
+                <span className="inline-block px-4 py-1.5 bg-blue-50 text-blue-700 text-[10px] font-black uppercase tracking-widest rounded-full mb-6">
+                  Message from the Founder
+                </span>
+                <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-[1.1]">
+                  "Your Future is Built on <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-700">
+                    Truth & Transparency
+                  </span>"
+                </h2>
+              </div>
+              <p className="text-lg text-gray-500 leading-relaxed italic border-l-4 border-blue-600 pl-8">
+                Global Academic Pathway was founded with a single mission: to provide students with the honest, reliable guidance they deserve when pursuing international education.
+              </p>
+              <div className="space-y-4 text-gray-600 text-sm font-medium leading-loose">
+                <p>
+                  We understand that studying abroad is more than just an admission; it's a life-changing decision. That's why we stay with you from your first counseling session until you've successfully settled into your new campus and community.
+                </p>
+                <div className="flex items-center gap-6 pt-6">
+                  <Link
+                    to="/about"
+                    className="px-8 py-4 bg-[#0f172a] text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-blue-600 transition-all shadow-xl shadow-gray-200"
+                  >
+                    Read Our Full Story
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── UPCOMING EVENTS ────────────────────────────────────────── */}
+      <section className="reveal section-hidden py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+            <div className="max-w-xl">
+              <span className="inline-block px-4 py-1.5 bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-widest rounded-full mb-4">
+                Stay Updated
+              </span>
+              <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight">
+                Upcoming <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-700">Events</span>
+              </h2>
+              <p className="mt-4 text-gray-500 text-lg">
+                Join our seminars, university open days, and virtual expos to simplify your study abroad journey.
+              </p>
+            </div>
+            <Link
+              to="/events"
+              className="px-6 py-3 bg-[#0f172a] text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-blue-600 transition-all shadow-xl shadow-gray-200 inline-flex items-center gap-2 group"
+            >
+              View All Events <Icons.ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          {!events || events.length === 0 ? (
+            <div className="py-20 text-center bg-gray-50 rounded-[2.5rem] border border-dashed border-gray-200">
+              <Icons.Globe size={48} className="mx-auto text-gray-300 mb-6" />
+              <p className="text-gray-400 font-bold">No upcoming events scheduled right now. Check back soon!</p>
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {events.filter(e => {
+                const eventDate = new Date(e.date);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                return eventDate >= today && e.status !== 'Completed';
+              }).slice(0, 3).map((event, idx) => (
+                <div
+                  key={event._id}
+                  className="group bg-white rounded-[2.5rem] border border-gray-100 overflow-hidden hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] transition-all duration-500 hover:-translate-y-2 relative flex flex-col"
+                >
+                  <div className="h-48 relative overflow-hidden">
+                    <img
+                      src={event.image || "https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?w=800&q=80"}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      alt={event.title}
+                    />
+                    <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md text-blue-600 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/20 shadow-sm">
+                      {event.type}
+                    </div>
+                  </div>
+                  <div className="p-8 flex-1 flex flex-col">
+                    <div className="flex items-center gap-3 text-blue-600 text-[10px] font-black tracking-widest uppercase mb-4">
+                      <Icons.Clock size={16} />
+                      {new Date(event.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </div>
+                    <h3 className="text-xl font-black text-gray-900 mb-4 group-hover:text-blue-600 transition-colors line-clamp-2 leading-tight">
+                      {event.title}
+                    </h3>
+                    <p className="text-gray-500 font-bold text-sm mb-8 line-clamp-2 leading-relaxed opacity-80">
+                      {event.description}
+                    </p>
+
+                    <div className="mt-auto pt-6 border-t border-gray-50 flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-gray-400 text-[9px] font-black uppercase tracking-widest">
+                        <Icons.MapPin size={14} className="text-blue-500" />
+                        {event.location}
+                      </div>
+                      <Link
+                        to={`/events/${event._id}`}
+                        className="text-xs font-black text-blue-600 uppercase tracking-widest flex items-center gap-1.5 group-hover:translate-x-1 transition-transform"
+                      >
+                        Join <span>→</span>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* ── CTA BANNER ─────────────────────────────────────────────────── */}
       <section id="contact" className="reveal section-hidden py-24">
@@ -722,10 +817,10 @@ export default function Home() {
                 </a>
                 <a
                   id="cta-call-btn"
-                  href="tel:+8801800000000"
+                  href="tel:+8801756560536"
                   className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 font-bold rounded-xl hover:bg-white/20 hover:-translate-y-0.5 transition-all duration-300 text-sm flex items-center justify-center gap-2"
                 >
-                  <Icons.Phone size={18} /> Call +880 1800-000000
+                  <Icons.Phone size={18} /> Call +880 17 5656 0536
                 </a>
               </div>
 
@@ -738,12 +833,12 @@ export default function Home() {
                 <span className="hidden sm:block w-px h-4 bg-white/20" />
                 <div className="flex items-center gap-2">
                   <Icons.MapPin size={14} />
-                  <span>🇧🇩 Chittagong Office — Coming Soon</span>
+                  <span>🇧🇩 BMA House, Main Post Office 4100, Chittagong</span>
                 </div>
                 <span className="hidden sm:block w-px h-4 bg-white/20" />
                 <div className="flex items-center gap-2">
                   <Icons.MapPin size={14} />
-                  <span>🇮🇳 Anand, Gujarat, India</span>
+                  <span>🇮🇳 Shanti Complex, Anand 388001, Gujarat, India</span>
                 </div>
               </div>
             </div>

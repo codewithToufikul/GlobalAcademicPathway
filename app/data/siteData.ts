@@ -1,8 +1,8 @@
 export const NAV_LINKS = [
   "Home",
   "About",
+  "Events",
   "Services",
-  "Countries",
   "Universities",
   "Contact",
 ];
@@ -20,11 +20,11 @@ export const DESTINATIONS = [
       "Home to top-ranked universities like Oxford, Cambridge, and Imperial College London. Offers 1-Year Masters and 2-Year Post-Study Work Visa (PSW).",
     intake: "Sep / Jan",
     benefits: [
-      "1-Year Fast-track Masters Programs",
-      "2-Year Post-Study Work Visa (Graduate Route)",
+      "MRes (Masters of Research) courses available",
+      "Support in Post study work visa",
       "Opportunity to work while studying",
       "World-class Education System",
-      "NHS Healthcare coverage for students",
+      "Connect to locally community though us.",
     ],
   },
 ];
@@ -264,4 +264,92 @@ export const PARTNERS = [
   "University of Hull",
   "Aston University",
   "Cardiff Metropolitan University",
+];
+
+export const COUNTRIES = [
+  { name: "Bangladesh", code: "BD", flag: "🇧🇩", dialCode: "+880" },
+  { name: "India", code: "IN", flag: "🇮🇳", dialCode: "+91" },
+  { name: "Pakistan", code: "PK", flag: "🇵🇰", dialCode: "+92" },
+  { name: "Sri Lanka", code: "LK", flag: "🇱🇰", dialCode: "+94" },
+  { name: "Nepal", code: "NP", flag: "🇳🇵", dialCode: "+977" },
+  { name: "United Kingdom", code: "GB", flag: "🇬🇧", dialCode: "+44" },
+  { name: "USA", code: "US", flag: "🇺🇸", dialCode: "+1" },
+  { name: "Canada", code: "CA", flag: "🇨🇦", dialCode: "+1" },
+  { name: "Australia", code: "AU", flag: "🇦🇺", dialCode: "+61" },
+  { name: "Germany", code: "DE", flag: "🇩🇪", dialCode: "+49" },
+  { name: "France", code: "FR", flag: "🇫🇷", dialCode: "+33" },
+  { name: "Ireland", code: "IE", flag: "🇮🇪", dialCode: "+353" },
+  { name: "Sweden", code: "SE", flag: "🇸🇪", dialCode: "+46" },
+  { name: "Denmark", code: "DK", flag: "🇩🇰", dialCode: "+45" },
+  { name: "Norway", code: "NO", flag: "🇳🇴", dialCode: "+47" },
+  { name: "Finland", code: "FI", flag: "🇫🇮", dialCode: "+358" },
+  { name: "Switzerland", code: "CH", flag: "🇨🇭", dialCode: "+41" },
+  { name: "Malaysia", code: "MY", flag: "🇲🇾", dialCode: "+60" },
+  { name: "Singapore", code: "SG", flag: "🇸🇬", dialCode: "+65" },
+  { name: "UAE", code: "AE", flag: "🇦🇪", dialCode: "+971" },
+  { name: "Saudi Arabia", code: "SA", flag: "🇸🇦", dialCode: "+966" },
+  { name: "Qatar", code: "QA", flag: "🇶🇦", dialCode: "+974" },
+  { name: "China", code: "CN", flag: "🇨🇳", dialCode: "+86" },
+  { name: "Japan", code: "JP", flag: "🇯🇵", dialCode: "+81" },
+  { name: "South Korea", code: "KR", flag: "🇰🇷", dialCode: "+82" },
+  { name: "Italy", code: "IT", flag: "🇮🇹", dialCode: "+39" },
+  { name: "Spain", code: "ES", flag: "🇪🇸", dialCode: "+34" },
+  { name: "Netherlands", code: "NL", flag: "🇳🇱", dialCode: "+31" },
+  { name: "New Zealand", code: "NZ", flag: "🇳🇿", dialCode: "+64" },
+  { name: "South Africa", code: "ZA", flag: "🇿🇦", dialCode: "+27" },
+  { name: "Nigeria", code: "NG", flag: "🇳🇬", dialCode: "+234" },
+  { name: "Egypt", code: "EG", flag: "🇪🇬", dialCode: "+20" },
+  { name: "Turkey", code: "TR", flag: "🇹🇷", dialCode: "+90" },
+  { name: "Brazil", code: "BR", flag: "🇧🇷", dialCode: "+55" },
+];
+
+export const EVENTS = [
+  {
+    id: "uk-virtual-open-day-2025",
+    title: "UK University Virtual Open Day 2025",
+    date: "May 15, 2025",
+    time: "10:00 AM - 4:00 PM",
+    location: "Online (Zoom)",
+    image: "https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?w=800&q=80",
+    description: "Meet representatives from top UK universities directly. Get on-spot assessment and application guidance.",
+    category: "Virtual Event",
+    featured: true,
+    status: "Upcoming"
+  },
+  {
+    id: "visa-guidance-seminar-dhaka",
+    title: "Student Visa Guidance Seminar",
+    date: "May 22, 2025",
+    time: "2:00 PM - 5:00 PM",
+    location: "Moghbazar, Dhaka",
+    image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
+    description: "Unlock the secrets to a successful student visa application. Expert tips on documentation and interview prep.",
+    category: "Seminar",
+    featured: false,
+    status: "Upcoming"
+  },
+  {
+    id: "spot-admission-greenwich",
+    title: "Spot Admission: University of Greenwich",
+    date: "June 05, 2025",
+    time: "11:00 AM - 3:00 PM",
+    location: "Pan Pacific Sonargaon, Dhaka",
+    image: "https://images.unsplash.com/photo-1523050338692-7b835a07973f?w=800&q=80",
+    description: "Apply directly to the University of Greenwich and get your offer letter within 48 hours. Bring your documents!",
+    category: "Admission Day",
+    featured: false,
+    status: "Upcoming"
+  },
+  {
+    id: "past-uk-intake-expo",
+    title: "UK September Intake Expo 2024",
+    date: "August 10, 2024",
+    time: "Full Day",
+    location: "Online",
+    image: "https://images.unsplash.com/photo-1475721027785-f74dea327912?w=800&q=80",
+    description: "Our biggest expo of the year with over 50 universities participating.",
+    category: "Expo",
+    featured: false,
+    status: "Past"
+  }
 ];

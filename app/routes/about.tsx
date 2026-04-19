@@ -86,18 +86,17 @@ export default function About() {
             {/* Founder Image/Card */}
             <div className="lg:col-span-5 relative group">
               <div className="absolute -inset-2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[3rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
-              <div className="relative bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[2.5rem] p-8 lg:p-12 text-white overflow-hidden min-h-[450px] flex flex-col justify-end">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32 blur-3xl" />
-                <div className="w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center mb-8 backdrop-blur-md ring-1 ring-white/30">
-                  <span className="text-4xl font-black text-white">J</span>
-                </div>
-                <div className="relative">
-                  <h2 className="text-3xl lg:text-4xl font-black mb-3">Mr. Jashim Uddin Ahmed</h2>
-                  <p className="text-blue-100 font-bold text-xs uppercase tracking-[0.2em] mb-6">CEO & Founder</p>
-                  <div className="h-1 w-12 bg-blue-300 rounded-full mb-6" />
-                  <p className="text-blue-50 text-sm leading-relaxed opacity-90 italic">
-                    "Addressing the risks of misinformation, ensuring every student's future is built on a foundation of reliability and honesty."
-                  </p>
+              <div className="relative rounded-[3rem] overflow-hidden shadow-2xl shadow-blue-100 group">
+                <img
+                  src="/image.jpeg"
+                  alt="Mr. Jashim Uddin Ahmed - Founder of GAP"
+                  className="w-full h-[550px] object-cover transition-transform duration-1000 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-transparent opacity-60" />
+                <div className="absolute bottom-10 left-10 text-white">
+                  <div className="w-16 h-1 w-12 bg-blue-500 rounded-full mb-4" />
+                  <p className="text-blue-100 font-bold text-xs uppercase tracking-[0.3em] mb-2">CEO & Founder</p>
+                  <h3 className="text-3xl font-black">Mr. Jashim Uddin Ahmed</h3>
                 </div>
               </div>
             </div>

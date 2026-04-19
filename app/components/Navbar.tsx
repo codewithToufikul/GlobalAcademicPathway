@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { NAV_LINKS } from "../data/siteData";
 
 export default function Navbar() {
+  const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -41,32 +42,30 @@ export default function Navbar() {
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-1">
             {NAV_LINKS.map((link) => {
-              const isPageLink = link === "About";
-              const isHome = link === "Home";
-              if (isHome) {
+              const linkPath = link === "Home" ? "/" : `/${link.toLowerCase()}`;
+              const isActive = location.pathname === linkPath;
+              const isHashLink = !["Home", "About", "Services", "Contact", "Events", "Universities"].includes(link);
+
+              if (!isHashLink) {
                 return (
                   <Link
                     key={link}
-                    to="/"
-                    className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-all duration-200"
+                    to={linkPath}
+                    className={`px-4 py-2 text-sm font-bold transition-all duration-300 rounded-xl ${isActive
+                        ? "text-blue-600 bg-blue-50/80 shadow-sm shadow-blue-50 scale-105"
+                        : "text-gray-500 hover:text-blue-600 hover:bg-gray-50"
+                      }`}
                   >
                     {link}
                   </Link>
                 );
               }
-              return isPageLink ? (
-                <Link
-                  key={link}
-                  to="/about"
-                  className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-all duration-200"
-                >
-                  {link}
-                </Link>
-              ) : (
+
+              return (
                 <a
                   key={link}
-                  href={`#${link.toLowerCase()}`}
-                  className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-all duration-200"
+                  href={`/#${link.toLowerCase()}`}
+                  className="px-4 py-2 text-sm font-bold text-gray-500 hover:text-blue-600 transition-all duration-300 rounded-xl hover:bg-gray-50"
                 >
                   {link}
                 </a>
@@ -76,12 +75,12 @@ export default function Navbar() {
 
           {/* CTA */}
           <div className="hidden lg:flex items-center gap-3">
-            <a
-              href="#contact"
+            <Link
+              to="/registration"
               className="px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl hover:from-blue-600 hover:to-indigo-700 shadow-sm hover:shadow-blue-200 hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
             >
-              Free Consultation
-            </a>
+              Registration
+            </Link>
           </div>
 
           {/* Mobile Hamburger */}
@@ -113,47 +112,45 @@ export default function Navbar() {
         >
           <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 mt-2 space-y-1">
             {NAV_LINKS.map((link) => {
-              const isPageLink = link === "About";
-              const isHome = link === "Home";
-              if (isHome) {
+              const linkPath = link === "Home" ? "/" : `/${link.toLowerCase()}`;
+              const isActive = location.pathname === linkPath;
+              const isHashLink = !["Home", "About", "Services", "Contact", "Events", "Universities"].includes(link);
+
+              if (!isHashLink) {
                 return (
                   <Link
                     key={link}
-                    to="/"
+                    to={linkPath}
                     onClick={() => setMobileOpen(false)}
-                    className="block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    className={`block px-4 py-3 text-sm font-bold transition-all duration-200 rounded-xl ${isActive
+                        ? "text-blue-600 bg-blue-50/80 shadow-inner"
+                        : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                      }`}
                   >
                     {link}
                   </Link>
                 );
               }
-              return isPageLink ? (
-                <Link
-                  key={link}
-                  to="/about"
-                  onClick={() => setMobileOpen(false)}
-                  className="block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                >
-                  {link}
-                </Link>
-              ) : (
+
+              return (
                 <a
                   key={link}
-                  href={`#${link.toLowerCase()}`}
+                  href={`/#${link.toLowerCase()}`}
                   onClick={() => setMobileOpen(false)}
-                  className="block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                  className="block px-4 py-3 text-sm font-bold text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200"
                 >
                   {link}
                 </a>
               );
             })}
             <div className="pt-2 border-t border-gray-100">
-              <a
-                href="#contact"
+              <Link
+                to="/registration"
+                onClick={() => setMobileOpen(false)}
                 className="block w-full text-center px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl"
               >
-                Free Consultation
-              </a>
+                Registration
+              </Link>
             </div>
           </div>
         </div>
