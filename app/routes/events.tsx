@@ -30,7 +30,7 @@ export default function EventsPage() {
    useEffect(() => {
       const fetchEvents = async () => {
          try {
-            const response = await fetch("https://gap-server.vercel.app/api/events");
+            const response = await fetch("https://gap-server-22sf.onrender.com/api/events");
             const json = await response.json();
             if (json.success) {
                setEvents(json.data);
@@ -161,8 +161,8 @@ export default function EventsPage() {
                         key={f}
                         onClick={() => setFilter(f)}
                         className={`px-10 py-4 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all duration-500 ${filter === f
-                              ? "bg-white text-blue-600 shadow-2xl border border-blue-50 scale-105"
-                              : "text-gray-400 hover:text-gray-600"
+                           ? "bg-white text-blue-600 shadow-2xl border border-blue-50 scale-105"
+                           : "text-gray-400 hover:text-gray-600"
                            }`}
                      >
                         {f}

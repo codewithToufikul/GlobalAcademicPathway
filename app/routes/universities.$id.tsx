@@ -42,7 +42,7 @@ export default function UniversityDetailPage() {
   useEffect(() => {
     const fetchUni = async () => {
       try {
-        const res = await fetch(`https://gap-server.vercel.app/api/universities/${id}`);
+        const res = await fetch(`https://gap-server-22sf.onrender.com/api/universities/${id}`);
         const json = await res.json();
         if (json.success) {
           setUni(json.data);

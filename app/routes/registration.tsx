@@ -55,7 +55,7 @@ export default function Registration() {
     }
     setIsSubmitting(true);
     try {
-      const response = await fetch("https://gap-server.vercel.app/api/registration", {
+      const response = await fetch("https://gap-server-22sf.onrender.com/api/registration", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -260,8 +260,8 @@ export default function Registration() {
                                 });
                               }}
                               className={`px-8 py-3 rounded-xl border text-sm font-bold transition-all duration-300 ${formData.destinations.includes(d.country)
-                                  ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-200"
-                                  : "bg-gray-50/50 border-gray-100 text-gray-600 hover:border-blue-200"
+                                ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-200"
+                                : "bg-gray-50/50 border-gray-100 text-gray-600 hover:border-blue-200"
                                 }`}
                             >
                               {d.country}

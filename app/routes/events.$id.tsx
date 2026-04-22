@@ -38,7 +38,7 @@ export default function EventDetailsPage() {
    useEffect(() => {
       const fetchEvent = async () => {
          try {
-            const res = await fetch(`https://gap-server.vercel.app/api/events`);
+            const res = await fetch(`https://gap-server-22sf.onrender.com/api/events`);
             const result = await res.json();
             if (result.success) {
                const found = result.data.find((e: any) => e._id === id);
@@ -58,7 +58,7 @@ export default function EventDetailsPage() {
       if (!regForm.verified) return alert("Verify you are not a robot");
       setIsSubmitting(true);
       try {
-         const res = await fetch("https://gap-server.vercel.app/api/events/register", {
+         const res = await fetch("https://gap-server-22sf.onrender.com/api/events/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
