@@ -87,7 +87,7 @@ export default function ContactPage() {
                            </div>
                            <h4 className="text-xl font-bold text-gray-900 group-hover:text-white mb-2 transition-colors">Location</h4>
                            <p className="text-gray-500 group-hover:text-blue-100 text-sm leading-relaxed transition-colors">
-                              Suite 402, Elite Tower<br />Panthapath, Dhaka 1215
+                              Skytuch Rajkush, 2nd Floor<br />43/R, 5/C Panthapath, Dhaka-1205
                            </p>
                         </div>
 
@@ -107,7 +107,7 @@ export default function ContactPage() {
                            </div>
                            <h4 className="text-xl font-bold text-gray-900 group-hover:text-white mb-2 transition-colors">Call Now</h4>
                            <p className="text-gray-500 group-hover:text-blue-100 text-sm transition-colors">
-                              +880 1712 345678<br />+880 1912 345678
+                              +880 1756-560536
                            </p>
                         </div>
 
@@ -290,7 +290,7 @@ export default function ContactPage() {
                               </h5>
                            </div>
                            <p className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] max-w-sm">
-                              {activeLocation === "dhaka" ? "Elite Tower, Panthapath, Dhaka 1215" :
+                              {activeLocation === "dhaka" ? "Skytuch Rajkush, 2nd Floor, 43/R, 5/C Panthapath, Dhaka-1205" :
                                  activeLocation === "chittagong" ? "130/133 Aju Shah Lane, BMA House, Bandar Main Post Office 4100" :
                                     "TF- 301, Shanti Complex, Near Gurudwara Circle, Anand 388001"}
                            </p>

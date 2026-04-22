@@ -380,7 +380,7 @@ export const EVENTS = [
     title: "Student Visa Guidance Seminar",
     date: "May 22, 2025",
     time: "2:00 PM - 5:00 PM",
-    location: "Moghbazar, Dhaka",
+    location: "Panthapath, Dhaka",
     image:
       "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
     description:

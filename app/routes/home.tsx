@@ -776,7 +776,7 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-white/60 text-xs">
                 <div className="flex items-center gap-2">
                   <Icons.MapPin size={14} />
-                  <span>🇧🇩 Moghbazar, Dhaka 1000</span>
+                  <span>🇧🇩 Skytuch Rajkush, 2nd Floor, 43/R, 5/C Panthapath, Dhaka-1205</span>
                 </div>
                 <span className="hidden sm:block w-px h-4 bg-white/20" />
                 <div className="flex items-center gap-2">

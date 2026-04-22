@@ -105,7 +105,7 @@ export default function Footer() {
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
                     <span className="text-blue-400 mt-0.5 shrink-0"><Icons.MapPin size={16} /></span>
-                    <span className="text-sm text-gray-500">Elite Tower, Panthapath, Dhaka 1215</span>
+                    <span className="text-sm text-gray-500">Skytuch Rajkush, 2nd Floor, 43/R, 5/C Panthapath, Dhaka-1205</span>
                   </div>
                 </div>
               </li>
