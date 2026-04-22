@@ -32,7 +32,7 @@ export default function ApplyPage() {
       setIsSubmitting(true);
 
       try {
-         const response = await fetch("http://localhost:5001/api/consultations", {
+         const response = await fetch("http://gap-server.vercel.app/api/consultations", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

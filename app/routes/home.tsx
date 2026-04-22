@@ -199,7 +199,7 @@ export default function Home() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch("http://localhost:5001/api/events");
+        const res = await fetch("http://gap-server.vercel.app/api/events");
         const json = await res.json();
         if (json.success) setEvents(json.data);
       } catch (err) { console.error("Events fetch failed:", err); }
@@ -649,62 +649,10 @@ export default function Home() {
       </section>
 
       {/* ── FOUNDER'S MESSAGE ─────────────────────────────────────────── */}
-      <section className="reveal section-hidden py-24 bg-white relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-24 items-center">
-            {/* Image Side */}
-            <div className="lg:col-span-5 relative group">
-              <div className="absolute -inset-4 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-[3rem] blur-2xl opacity-10 group-hover:opacity-20 transition duration-700" />
-              <div className="relative rounded-[3rem] overflow-hidden shadow-2xl shadow-blue-900/10">
-                <img
-                  src="/image.jpeg"
-                  alt="Mr. Jashim Uddin Ahmed"
-                  className="w-full h-[600px] object-cover transition-transform duration-1000 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-transparent opacity-40" />
-                <div className="absolute bottom-8 left-8 text-white">
-                  <h4 className="text-2xl font-black">Mr. Jashim Uddin Ahmed</h4>
-                  <p className="text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] mt-1">Founding Director</p>
-                </div>
-              </div>
-            </div>
 
-            {/* Text Side */}
-            <div className="lg:col-span-7 space-y-8">
-              <div>
-                <span className="inline-block px-4 py-1.5 bg-blue-50 text-blue-700 text-[10px] font-black uppercase tracking-widest rounded-full mb-6">
-                  Message from the Founder
-                </span>
-                <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-[1.1]">
-                  "Your Future is Built on <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-700">
-                    Truth & Transparency
-                  </span>"
-                </h2>
-              </div>
-              <p className="text-lg text-gray-500 leading-relaxed italic border-l-4 border-blue-600 pl-8">
-                Global Academic Pathway was founded with a single mission: to provide students with the honest, reliable guidance they deserve when pursuing international education.
-              </p>
-              <div className="space-y-4 text-gray-600 text-sm font-medium leading-loose">
-                <p>
-                  We understand that studying abroad is more than just an admission; it's a life-changing decision. That's why we stay with you from your first counseling session until you've successfully settled into your new campus and community.
-                </p>
-                <div className="flex items-center gap-6 pt-6">
-                  <Link
-                    to="/about"
-                    className="px-8 py-4 bg-[#0f172a] text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-blue-600 transition-all shadow-xl shadow-gray-200"
-                  >
-                    Read Our Full Story
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ── UPCOMING EVENTS ────────────────────────────────────────── */}
-      <section className="reveal section-hidden py-24 bg-white">
+      <section className="reveal section-hidden py-14 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
             <div className="max-w-xl">
@@ -810,7 +758,7 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
                 <a
                   id="cta-book-btn"
-                  href="mailto:info@globalacademicpathway.com"
+                  href="mailto:info@info@globalacademicpathway.org.com"
                   className="px-8 py-4 bg-white text-blue-700 font-bold rounded-xl hover:bg-blue-50 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 text-sm flex items-center justify-center gap-2"
                 >
                   <Icons.Mail size={18} /> Email Us Now

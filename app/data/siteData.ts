@@ -21,10 +21,67 @@ export const DESTINATIONS = [
     intake: "Sep / Jan",
     benefits: [
       "MRes (Masters of Research) courses available",
-      "Support in Post study work visa",
+      "Support in post study work visa",
       "Opportunity to work while studying",
       "World-class Education System",
-      "Connect to locally community though us.",
+      "Connect to local community though us.",
+    ],
+  },
+  {
+    country: "USA",
+    code: "US",
+    tag: "Top Choice",
+    universities: "4,000+",
+    programs: "10,000+",
+    image:
+      "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=1200&q=80",
+    description:
+      "The global leader in higher education with prestigious Ivy League schools and cutting-edge research facilities. Home to Silicon Valley tech giants.",
+    intake: "Fall / Spring",
+    benefits: [
+      "OPT (Optional Practical Training) up to 3 years for STEM",
+      "Unmatched global prestige",
+      "Diverse campus culture",
+      "High flexibility in course selection",
+      "Leading innovation and research hubs",
+    ],
+  },
+  {
+    country: "Canada",
+    code: "CA",
+    tag: "Student Friendly",
+    universities: "100+",
+    programs: "5,000+",
+    image:
+      "https://images.unsplash.com/photo-1517935707175-e0636989bf4e?w=1200&q=80",
+    description:
+      "Renowned for its high quality of life, multicultural environment, and generous post-graduation work permits and immigration pathways.",
+    intake: "Fall / Winter / Summer",
+    benefits: [
+      "Post-Graduation Work Permit (PGWP) up to 3 years",
+      "High quality of life and safety",
+      "Pathways to Permanent Residency (PR)",
+      "Lower tuition fees compared to USA/UK",
+      "Inclusive multicultural society",
+    ],
+  },
+  {
+    country: "Australia",
+    code: "AU",
+    tag: "Future Ready",
+    universities: "43",
+    programs: "2,000+",
+    image:
+      "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=1200&q=80",
+    description:
+      "Known for its excellence in research, vibrant student cities, and strong emphasis on practical skills and industry connections.",
+    intake: "Feb / July",
+    benefits: [
+      "Generous Post-Study Work (PSW) rights",
+      "High standard of living",
+      "Work up to 48 hours per fortnight",
+      "Strong economy and job market",
+      "Beautiful climate and outdoor lifestyle",
     ],
   },
 ];
@@ -310,11 +367,13 @@ export const EVENTS = [
     date: "May 15, 2025",
     time: "10:00 AM - 4:00 PM",
     location: "Online (Zoom)",
-    image: "https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?w=800&q=80",
-    description: "Meet representatives from top UK universities directly. Get on-spot assessment and application guidance.",
+    image:
+      "https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?w=800&q=80",
+    description:
+      "Meet representatives from top UK universities directly. Get on-spot assessment and application guidance.",
     category: "Virtual Event",
     featured: true,
-    status: "Upcoming"
+    status: "Upcoming",
   },
   {
     id: "visa-guidance-seminar-dhaka",
@@ -322,11 +381,13 @@ export const EVENTS = [
     date: "May 22, 2025",
     time: "2:00 PM - 5:00 PM",
     location: "Moghbazar, Dhaka",
-    image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
-    description: "Unlock the secrets to a successful student visa application. Expert tips on documentation and interview prep.",
+    image:
+      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
+    description:
+      "Unlock the secrets to a successful student visa application. Expert tips on documentation and interview prep.",
     category: "Seminar",
     featured: false,
-    status: "Upcoming"
+    status: "Upcoming",
   },
   {
     id: "spot-admission-greenwich",
@@ -334,11 +395,13 @@ export const EVENTS = [
     date: "June 05, 2025",
     time: "11:00 AM - 3:00 PM",
     location: "Pan Pacific Sonargaon, Dhaka",
-    image: "https://images.unsplash.com/photo-1523050338692-7b835a07973f?w=800&q=80",
-    description: "Apply directly to the University of Greenwich and get your offer letter within 48 hours. Bring your documents!",
+    image:
+      "https://images.unsplash.com/photo-1523050338692-7b835a07973f?w=800&q=80",
+    description:
+      "Apply directly to the University of Greenwich and get your offer letter within 48 hours. Bring your documents!",
     category: "Admission Day",
     featured: false,
-    status: "Upcoming"
+    status: "Upcoming",
   },
   {
     id: "past-uk-intake-expo",
@@ -346,10 +409,12 @@ export const EVENTS = [
     date: "August 10, 2024",
     time: "Full Day",
     location: "Online",
-    image: "https://images.unsplash.com/photo-1475721027785-f74dea327912?w=800&q=80",
-    description: "Our biggest expo of the year with over 50 universities participating.",
+    image:
+      "https://images.unsplash.com/photo-1475721027785-f74dea327912?w=800&q=80",
+    description:
+      "Our biggest expo of the year with over 50 universities participating.",
     category: "Expo",
     featured: false,
-    status: "Past"
-  }
+    status: "Past",
+  },
 ];

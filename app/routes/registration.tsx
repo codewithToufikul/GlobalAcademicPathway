@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
 import * as Icons from "../components/Icons";
-import { COUNTRIES } from "../data/siteData";
+import { COUNTRIES, DESTINATIONS } from "../data/siteData";
 import PhoneInputPkg from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
@@ -55,7 +55,7 @@ export default function Registration() {
     }
     setIsSubmitting(true);
     try {
-      const response = await fetch("http://localhost:5001/api/registration", {
+      const response = await fetch("http://gap-server.vercel.app/api/registration", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -169,7 +169,8 @@ export default function Registration() {
                             enableSearch={true}
                           />
                         </div>
-                        <style dangerouslySetInnerHTML={{ __html: `
+                        <style dangerouslySetInnerHTML={{
+                          __html: `
                           .phone-input-container .react-tel-input .flag-dropdown {
                             background: transparent !important;
                             border: none !important;
@@ -211,7 +212,7 @@ export default function Registration() {
                       </div>
                       <div>
                         <label className="block text-sm font-bold text-gray-700 mb-2">Country Of Citizenship <span className="text-red-500">*</span></label>
-                        <select 
+                        <select
                           value={formData.citizenship}
                           onChange={(e) => setFormData({ ...formData, citizenship: e.target.value })}
                           className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all duration-300 outline-none appearance-none cursor-pointer text-gray-600"
@@ -224,7 +225,7 @@ export default function Registration() {
                       </div>
                       <div>
                         <label className="block text-sm font-bold text-gray-700 mb-2">Current Residence (If Different)</label>
-                        <select 
+                        <select
                           value={formData.residence}
                           onChange={(e) => setFormData({ ...formData, residence: e.target.value })}
                           className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all duration-300 outline-none appearance-none cursor-pointer text-gray-600"
@@ -243,19 +244,27 @@ export default function Registration() {
                       <div>
                         <label className="block text-sm font-bold text-gray-700 mb-4">Preferred Study Destinations <span className="text-red-500">*</span></label>
                         <div className="flex flex-wrap gap-2.5">
-                          {["UK"].map((d) => (
+                          {DESTINATIONS.map((d) => (
                             <button
-                              key={d}
+                              key={d.country}
                               type="button"
                               onClick={() => {
-                                setFormData(prev => ({
-                                  ...prev,
-                                  destinations: ["UK"]
-                                }));
+                                setFormData(prev => {
+                                  const exists = prev.destinations.includes(d.country);
+                                  return {
+                                    ...prev,
+                                    destinations: exists
+                                      ? prev.destinations.filter(item => item !== d.country)
+                                      : [...prev.destinations, d.country]
+                                  };
+                                });
                               }}
-                              className={`px-8 py-3 rounded-xl border text-sm font-bold transition-all duration-300 bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-200`}
+                              className={`px-8 py-3 rounded-xl border text-sm font-bold transition-all duration-300 ${formData.destinations.includes(d.country)
+                                  ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-200"
+                                  : "bg-gray-50/50 border-gray-100 text-gray-600 hover:border-blue-200"
+                                }`}
                             >
-                              {d}
+                              {d.country}
                             </button>
                           ))}
                         </div>
@@ -274,8 +283,8 @@ export default function Registration() {
                             <label
                               key={lvl}
                               className={`flex items-start gap-3 p-4 border rounded-2xl cursor-pointer transition-all duration-300 ${formData.studyLevel === lvl
-                                  ? "bg-blue-50 border-blue-400 ring-2 ring-blue-50 shadow-sm shadow-blue-100"
-                                  : "bg-gray-50/50 border-gray-100 hover:border-blue-200"
+                                ? "bg-blue-50 border-blue-400 ring-2 ring-blue-50 shadow-sm shadow-blue-100"
+                                : "bg-gray-50/50 border-gray-100 hover:border-blue-200"
                                 }`}
                             >
                               <input
@@ -312,8 +321,8 @@ export default function Registration() {
                               type="button"
                               onClick={() => setFormData(prev => ({ ...prev, qualification: q }))}
                               className={`px-5 py-3 rounded-xl border text-[13px] font-bold transition-all duration-300 ${formData.qualification === q
-                                  ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-100"
-                                  : "bg-gray-50/50 border-gray-100 text-gray-600 hover:border-blue-200"
+                                ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-100"
+                                : "bg-gray-50/50 border-gray-100 text-gray-600 hover:border-blue-200"
                                 }`}
                             >
                               {q}
@@ -324,29 +333,29 @@ export default function Registration() {
 
                       {formData.qualification && (
                         <div className="p-8 bg-white border border-gray-100 rounded-[2rem] shadow-sm animate-in zoom-in duration-300">
-                           <h4 className="font-black text-gray-900 mb-6">{formData.qualification}</h4>
-                           <div className="grid sm:grid-cols-2 gap-6">
-                              <div className="space-y-2">
-                                 <label className="text-[10px] uppercase font-black text-gray-400 tracking-widest ml-1">Year Of Completion <span className="text-red-500">*</span></label>
-                                 <input 
-                                   type="text" 
-                                   placeholder="e.g. 2022" 
-                                   value={formData.academicYear}
-                                   onChange={(e) => setFormData({ ...formData, academicYear: e.target.value })}
-                                   className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all outline-none font-bold" 
-                                 />
-                              </div>
-                              <div className="space-y-2">
-                                 <label className="text-[10px] uppercase font-black text-gray-400 tracking-widest ml-1">GPA/Grade <span className="text-red-500">*</span></label>
-                                 <input 
-                                   type="text" 
-                                   placeholder="e.g. 4.8" 
-                                   value={formData.academicGrade}
-                                   onChange={(e) => setFormData({ ...formData, academicGrade: e.target.value })}
-                                   className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all outline-none font-bold" 
-                                 />
-                              </div>
-                           </div>
+                          <h4 className="font-black text-gray-900 mb-6">{formData.qualification}</h4>
+                          <div className="grid sm:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                              <label className="text-[10px] uppercase font-black text-gray-400 tracking-widest ml-1">Year Of Completion <span className="text-red-500">*</span></label>
+                              <input
+                                type="text"
+                                placeholder="e.g. 2022"
+                                value={formData.academicYear}
+                                onChange={(e) => setFormData({ ...formData, academicYear: e.target.value })}
+                                className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all outline-none font-bold"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <label className="text-[10px] uppercase font-black text-gray-400 tracking-widest ml-1">GPA/Grade <span className="text-red-500">*</span></label>
+                              <input
+                                type="text"
+                                placeholder="e.g. 4.8"
+                                value={formData.academicGrade}
+                                onChange={(e) => setFormData({ ...formData, academicGrade: e.target.value })}
+                                className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all outline-none font-bold"
+                              />
+                            </div>
+                          </div>
                         </div>
                       )}
                     </div>
@@ -356,7 +365,7 @@ export default function Registration() {
                     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                       <div>
                         <label className="block text-sm font-bold text-gray-700 mb-2">English Proficiency Test</label>
-                        <select 
+                        <select
                           value={formData.englishTest}
                           onChange={(e) => setFormData({ ...formData, englishTest: e.target.value })}
                           className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all outline-none text-gray-600"
@@ -394,7 +403,7 @@ export default function Registration() {
                     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                       <div>
                         <label className="block text-sm font-bold text-gray-700 mb-4 tracking-tighter">Do You Have Work Experience?</label>
-                        <select 
+                        <select
                           value={formData.hasWorkExp}
                           onChange={(e) => setFormData({ ...formData, hasWorkExp: e.target.value })}
                           className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all outline-none text-gray-600 appearance-none cursor-pointer"
@@ -408,19 +417,18 @@ export default function Registration() {
                       <div className="group">
                         <div className="bg-[#f9f9f9] border border-[#d3d3d3] rounded-sm p-4 w-full sm:w-[304px] flex items-center justify-between shadow-sm hover:shadow-md transition-shadow cursor-default select-none">
                           <div className="flex items-center gap-4">
-                            <div 
+                            <div
                               onClick={() => {
                                 if (!formData.verified) {
                                   setFormData({ ...formData, verified: true });
                                 }
                               }}
-                              className={`w-7 h-7 border-2 rounded-sm flex items-center justify-center transition-all cursor-pointer ${
-                                formData.verified ? "bg-white border-white" : "bg-white border-[#c1c1c1] hover:border-[#b2b2b2]"
-                              }`}
+                              className={`w-7 h-7 border-2 rounded-sm flex items-center justify-center transition-all cursor-pointer ${formData.verified ? "bg-white border-white" : "bg-white border-[#c1c1c1] hover:border-[#b2b2b2]"
+                                }`}
                             >
                               {formData.verified ? (
                                 <div className="text-green-600 animate-in zoom-in duration-300">
-                                   <Icons.ShieldCheck size={26} strokeWidth={3} />
+                                  <Icons.ShieldCheck size={26} strokeWidth={3} />
                                 </div>
                               ) : (
                                 <div className="w-full h-full" />
@@ -429,9 +437,9 @@ export default function Registration() {
                             <span className="text-sm font-medium text-[#555]">I'm not a robot</span>
                           </div>
                           <div className="flex flex-col items-center opacity-80">
-                            <img 
-                              src="https://www.gstatic.com/recaptcha/api2/logo_48.png" 
-                              alt="reCAPTCHA" 
+                            <img
+                              src="https://www.gstatic.com/recaptcha/api2/logo_48.png"
+                              alt="reCAPTCHA"
                               className="w-8 h-8 object-contain mb-1"
                             />
                             <div className="text-[8px] text-[#555] font-bold text-center leading-tight">

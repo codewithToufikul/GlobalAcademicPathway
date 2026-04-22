@@ -25,20 +25,24 @@ GAP/
 ## 🛠️ Getting Started
 
 ### 1. Frontend Setup
+
 ```bash
 cd GlobalAcadenicPathway
 npm install
 npm run dev
 ```
+
 Visit: `http://localhost:5173`
 
 ### 2. Backend Setup
+
 ```bash
 cd server
 npm install
 npm run dev
 ```
-Runs on: `http://localhost:5001`
+
+Runs on: `http://gap-server.vercel.app`
 
 **Note**: Ensure your local MongoDB instance is running or update the `MONGO_URI` in `server/.env`.
 

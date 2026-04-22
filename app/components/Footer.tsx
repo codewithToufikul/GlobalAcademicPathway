@@ -128,13 +128,13 @@ export default function Footer() {
                 </div>
               </li>
               <li className="pt-2 border-t border-gray-800 space-y-3">
-                  <div className="flex items-start gap-3">
-                    <span className="text-blue-400 mt-0.5 shrink-0"><Icons.Phone size={16} /></span>
-                    <span className="text-sm text-gray-500">+880 17 5656 0536</span>
-                  </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-blue-400 mt-0.5 shrink-0"><Icons.Phone size={16} /></span>
+                  <span className="text-sm text-gray-500">+880 17 5656 0536</span>
+                </div>
                 <div className="flex items-start gap-3">
                   <span className="text-blue-400 mt-0.5 shrink-0"><Icons.Mail size={16} /></span>
-                  <span className="text-sm text-gray-500">info@gapathway.com</span>
+                  <span className="text-sm text-gray-500">info@globalacademicpathway.org</span>
                 </div>
               </li>
             </ul>

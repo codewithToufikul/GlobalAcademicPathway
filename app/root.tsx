@@ -59,7 +59,7 @@ export default function App() {
   return (
     <>
       {!isAdminPage && <Navbar />}
-      <main>
+      <main className="relative z-10 bg-white min-h-screen">
         <Outlet />
       </main>
       {!isAdminPage && (
