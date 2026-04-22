@@ -4,7 +4,7 @@ import * as Icons from "../components/Icons";
 type Module = "Summary" | "Registrations" | "Consultations" | "Events" | "Universities";
 
 const IMGBB_API_KEY = "8b86a561b76cd59e16d93c1098c5018a";
-const API = "http://gap-server.vercel.app/api";
+const API = "https://gap-server.vercel.app/api";
 
 // ── Sub-Components (Moved Outside to Fix Focus Issues) ───────────────────
 

@@ -199,7 +199,7 @@ export default function Home() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch("http://gap-server.vercel.app/api/events");
+        const res = await fetch("https://gap-server.vercel.app/api/events");
         const json = await res.json();
         if (json.success) setEvents(json.data);
       } catch (err) { console.error("Events fetch failed:", err); }

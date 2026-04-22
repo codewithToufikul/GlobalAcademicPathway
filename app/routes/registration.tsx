@@ -55,7 +55,7 @@ export default function Registration() {
     }
     setIsSubmitting(true);
     try {
-      const response = await fetch("http://gap-server.vercel.app/api/registration", {
+      const response = await fetch("https://gap-server.vercel.app/api/registration", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

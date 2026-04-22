@@ -27,7 +27,7 @@ export default function ContactPage() {
       setError("");
 
       try {
-         const response = await fetch("http://gap-server.vercel.app/api/contact", {
+         const response = await fetch("https://gap-server.vercel.app/api/contact", {
             method: "POST",
             headers: {
                "Content-Type": "application/json",

@@ -30,7 +30,7 @@ export default function EventsPage() {
    useEffect(() => {
       const fetchEvents = async () => {
          try {
-            const response = await fetch("http://gap-server.vercel.app/api/events");
+            const response = await fetch("https://gap-server.vercel.app/api/events");
             const json = await response.json();
             if (json.success) {
                setEvents(json.data);
