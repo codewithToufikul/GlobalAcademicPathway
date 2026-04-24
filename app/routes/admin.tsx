@@ -1,12 +1,134 @@
 import React, { useState, useEffect } from "react";
 import * as Icons from "../components/Icons";
 
-type Module = "Summary" | "Registrations" | "Consultations" | "Events" | "Universities";
+type Module = "Summary" | "Registrations" | "Consultations" | "Events" | "Universities" | "Services";
 
 const IMGBB_API_KEY = "8b86a561b76cd59e16d93c1098c5018a";
-const API = "https://gap-server-22sf.onrender.com/api";
+const API = typeof window !== "undefined" && window.location.hostname === "localhost"
+  ? "https://gap-server-22sf.onrender.com/api"
+  : "https://gap-server-22sf.onrender.com/api";
 
 // ── Sub-Components (Moved Outside to Fix Focus Issues) ───────────────────
+const ServiceEditModal = ({ editingService, setEditingService, handleSaveService, isUploading, uploadToImgBB, serviceSaving }: any) => {
+  if (!editingService) return null;
+  return (
+    <div className="fixed inset-0 bg-[#0f172a]/95 backdrop-blur-2xl z-[100] overflow-y-auto">
+      <div className="min-h-screen flex items-start justify-center p-6 py-12">
+        <div className="bg-white w-full max-w-5xl rounded-[3rem] p-10 lg:p-16 shadow-2xl relative">
+          <button
+            onClick={() => setEditingService(null)}
+            className="absolute top-8 right-8 w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center hover:bg-red-50 hover:text-red-600 transition-all"
+          >
+            <Icons.Plus size={20} className="rotate-45" />
+          </button>
+
+          <div className="mb-10 text-center lg:text-left">
+            <span className="inline-block px-4 py-1 bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-3">
+              {editingService._id ? "Edit Service Portfolio" : "Initiate New Service"}
+            </span>
+            <h2 className="text-4xl font-black text-gray-900 tracking-tighter italic">
+              {editingService._id ? editingService.title : "Service Configuration"}
+            </h2>
+          </div>
+
+          <form onSubmit={handleSaveService} className="space-y-10">
+            <div className="grid lg:grid-cols-2 gap-8">
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Service Title *</label>
+                  <input type="text" required value={editingService.title || ""} onChange={e => setEditingService({ ...editingService, title: e.target.value })} className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none font-bold focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all" placeholder="Strategic Career Counseling" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Hook Description (Short) *</label>
+                  <textarea required value={editingService.description || ""} onChange={e => setEditingService({ ...editingService, description: e.target.value })} className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none font-bold h-24 resize-none focus:bg-white transition-all" placeholder="Briefly explain the service core value..." />
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Icon Type</label>
+                    <select value={editingService.icon || "Globe"} onChange={e => setEditingService({ ...editingService, icon: e.target.value })} className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none font-black text-[10px] uppercase tracking-widest">
+                      {Object.keys(Icons).map(icon => <option key={icon} value={icon}>{icon}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Deployment Order</label>
+                    <input type="number" value={editingService.order || 0} onChange={e => setEditingService({ ...editingService, order: parseInt(e.target.value) })} className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none font-bold" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Visual Brand (Gradient) *</label>
+                  <select value={editingService.color || "from-blue-600 to-indigo-700"} onChange={e => setEditingService({ ...editingService, color: e.target.value })} className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none font-bold">
+                    <option value="from-blue-600 to-indigo-700">Blue-Indigo (Oceanic)</option>
+                    <option value="from-emerald-600 to-teal-700">Emerald-Teal (Growth)</option>
+                    <option value="from-purple-600 to-pink-700">Purple-Pink (Innovation)</option>
+                    <option value="from-orange-600 to-red-700">Orange-Red (Energy)</option>
+                    <option value="from-yellow-500 to-amber-600">Yellow-Amber (Merit)</option>
+                    <option value="from-sky-500 to-blue-600">Sky-Blue (Velocity)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">In-depth Narrative (Full Description)</label>
+              <textarea value={editingService.fullDescription || ""} onChange={e => setEditingService({ ...editingService, fullDescription: e.target.value })} className="w-full px-8 py-6 bg-gray-50 border border-gray-100 rounded-[2rem] outline-none font-bold h-48 focus:bg-white transition-all text-gray-600" placeholder="Provide a detailed explanation of the service methodology, process, and outcome..." />
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-10">
+              <section>
+                <div className="flex items-center justify-between mb-6">
+                  <label className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Operational Deliverables</label>
+                  <button type="button" onClick={() => setEditingService({ ...editingService, features: [...(editingService.features || []), ""] })} className="text-[10px] font-black text-blue-600 uppercase hover:underline">+ Add Feature</button>
+                </div>
+                <div className="space-y-3">
+                  {(editingService.features || [""]).map((f: string, i: number) => (
+                    <div key={i} className="flex gap-2">
+                      <input type="text" value={f} onChange={e => {
+                        const newF = [...editingService.features];
+                        newF[i] = e.target.value;
+                        setEditingService({ ...editingService, features: newF });
+                      }} placeholder={`Deliverable ${i + 1}`} className="flex-1 px-5 py-3.5 bg-gray-50 border border-gray-100 rounded-xl outline-none font-bold text-xs" />
+                      <button type="button" onClick={() => setEditingService({ ...editingService, features: editingService.features.filter((_: any, idx: number) => idx !== i) })} className="p-3 text-red-300 hover:text-red-500 transition-colors"><Icons.Plus className="rotate-45" size={16} /></button>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              <section>
+                <div className="flex items-center justify-between mb-6">
+                  <label className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Student Benefits</label>
+                  <button type="button" onClick={() => setEditingService({ ...editingService, benefits: [...(editingService.benefits || []), ""] })} className="text-[10px] font-black text-emerald-600 uppercase hover:underline">+ Add Benefit</button>
+                </div>
+                <div className="space-y-3">
+                  {(editingService.benefits || [""]).map((b: string, i: number) => (
+                    <div key={i} className="flex gap-2">
+                      <input type="text" value={b} onChange={e => {
+                        const newB = [...editingService.benefits];
+                        newB[i] = e.target.value;
+                        setEditingService({ ...editingService, benefits: newB });
+                      }} placeholder={`Benefit ${i + 1}`} className="flex-1 px-5 py-3.5 bg-gray-50 border border-gray-100 rounded-xl outline-none font-bold text-xs" />
+                      <button type="button" onClick={() => setEditingService({ ...editingService, benefits: editingService.benefits.filter((_: any, idx: number) => idx !== i) })} className="p-3 text-red-300 hover:text-red-500 transition-colors"><Icons.Plus className="rotate-45" size={16} /></button>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </div>
+
+            <div className="flex gap-4 pt-8">
+              <button type="submit" disabled={serviceSaving} className="flex-1 py-6 bg-blue-600 text-white font-black rounded-2xl uppercase tracking-[0.2em] text-xs shadow-2xl hover:bg-gray-900 transition-all disabled:bg-gray-300">
+                {serviceSaving ? "Processing Deployment..." : editingService._id ? "💾 Save Configuration" : "🚀 Launch Service"}
+              </button>
+              <button type="button" onClick={() => setEditingService(null)} className="px-12 py-6 bg-gray-100 text-gray-500 font-black rounded-2xl uppercase tracking-[0.2em] text-xs hover:bg-gray-200 transition-all">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 
 const UniversityEditModal = ({ editingUni, setEditingUni, handleSaveUni, isUploading, uploadToImgBB, uniSaving }: any) => {
   if (!editingUni) return null;
@@ -281,6 +403,7 @@ export default function AdminPortal() {
   const [events, setEvents] = useState<any[]>([]);
   const [universities, setUniversities] = useState<any[]>([]);
   const [consultations, setConsultations] = useState<any[]>([]);
+  const [services, setServices] = useState<any[]>([]);
 
   // General Form States
   const [isAdding, setIsAdding] = useState(false);
@@ -294,6 +417,10 @@ export default function AdminPortal() {
 
   // Event Edit States
   const [editingEvent, setEditingEvent] = useState<any | null>(null);
+
+  // Service Edit States
+  const [editingService, setEditingService] = useState<any | null>(null);
+  const [serviceSaving, setServiceSaving] = useState(false);
 
   const getToken = () => localStorage.getItem("gap_admin_token") || "";
 
@@ -327,13 +454,15 @@ export default function AdminPortal() {
         fetch(`${API}/registration`, { headers }),
         fetch(`${API}/events`, { headers }),
         fetch(`${API}/universities`, { headers }),
-        fetch(`${API}/consultations`, { headers })
+        fetch(`${API}/consultations`, { headers }),
+        fetch(`${API}/services`, { headers })
       ]);
-      const [reg, eve, uni, con] = await Promise.all([regRes.json(), eveRes.json(), uniRes.json(), conRes.json()]);
+      const [reg, eve, uni, con, ser] = await Promise.all([regRes.json(), eveRes.json(), uniRes.json(), conRes.json(), (await fetch(`${API}/services`, { headers })).json()]);
       if (reg.success) setRegistrations(reg.data);
       if (eve.success) setEvents(eve.data);
       if (uni.success) setUniversities(uni.data);
       if (con.success) setConsultations(con.data);
+      if (ser.success) setServices(ser.data);
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
   };
@@ -500,6 +629,48 @@ export default function AdminPortal() {
     highlights: [""], benefits: [""], targetAudience: [""]
   });
 
+  const openNewService = () => setEditingService({
+    title: "", description: "", fullDescription: "",
+    icon: "Globe", color: "from-blue-600 to-indigo-700",
+    features: [""], benefits: [""], order: services.length,
+    status: "Active"
+  });
+
+  const handleSaveService = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setServiceSaving(true);
+    const token = getToken();
+    try {
+      const isNew = !editingService._id;
+      const url = isNew ? `${API}/services` : `${API}/services/${editingService._id}`;
+      const method = isNew ? "POST" : "PATCH";
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify(editingService),
+      });
+      if (res.ok) {
+        await fetchAllData(token);
+        setEditingService(null);
+      } else alert("Service deployment failed");
+    } catch (err) { alert("Network error during service deployment"); }
+    finally { setServiceSaving(false); }
+  };
+
+  const handleDeleteService = async (id: string, title: string) => {
+    if (!confirm(`Permanently de-list "${title}" from the service catalog?`)) return;
+    const token = getToken();
+    try {
+      const res = await fetch(`${API}/services/${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      if (res.ok) {
+        setServices(prev => prev.filter(s => s._id !== id));
+      }
+    } catch (err) { alert("Deletion protocol failed"); }
+  };
+
   // Selected Item States
   const [selectedRegistration, setSelectedRegistration] = useState<any | null>(null);
   const [selectedConsultation, setSelectedConsultation] = useState<any | null>(null);
@@ -567,10 +738,10 @@ export default function AdminPortal() {
             {consultations.slice(0, 5).map((c: any) => (
               <div key={c._id} className="flex items-center justify-between p-4 lg:p-5 bg-gray-50/50 rounded-xl lg:rounded-2xl">
                 <div className="min-w-0 flex-1">
-                  <div className="text-sm font-black text-gray-900 truncate">{c.name}</div>
-                  <div className="text-[10px] text-gray-400 truncate">{c.mobile}</div>
+                  <div className="text-sm font-black text-gray-900 truncate">{c.studentName || c.name}</div>
+                  <div className="text-[10px] text-gray-400 truncate">{c.phone || c.mobile}</div>
                 </div>
-                <div className="text-[10px] font-black text-orange-600 bg-white px-3 py-1 rounded-lg shrink-0 ml-4">{c.country}</div>
+                <div className="text-[10px] font-black text-orange-600 bg-white px-3 py-1 rounded-lg shrink-0 ml-4">{c.subject || 'Inquiry'}</div>
               </div>
             ))}
             {consultations.length === 0 && <p className="text-center py-10 text-[10px] font-black text-gray-300 uppercase tracking-[0.2em]">No Consultations</p>}
@@ -607,17 +778,19 @@ export default function AdminPortal() {
           <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-8 text-center lg:text-left">Registered Student Candidate</p>
 
           <div className="space-y-5 lg:space-y-6">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 shrink-0"><Icons.Mail size={18} /></div>
-              <div className="min-w-0 flex-1"><div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Email</div><div className="text-sm font-bold text-gray-700 truncate">{reg.email}</div></div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 shrink-0"><Icons.Phone size={18} /></div>
-              <div className="min-w-0 flex-1"><div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Mobile</div><div className="text-sm font-bold text-gray-700 truncate">{reg.mobile}</div></div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 shrink-0"><Icons.Globe size={18} /></div>
-              <div className="min-w-0 flex-1"><div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Origin</div><div className="text-sm font-bold text-gray-700 truncate">{reg.country || 'Not Specified'}</div></div>
+            <div className="space-y-5 lg:space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 shrink-0"><Icons.Mail size={18} /></div>
+                <div className="min-w-0 flex-1"><div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Email</div><div className="text-sm font-bold text-gray-700 truncate">{reg.email}</div></div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 shrink-0"><Icons.Phone size={18} /></div>
+                <div className="min-w-0 flex-1"><div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Phone</div><div className="text-sm font-bold text-gray-700 truncate">{reg.phone}</div></div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 shrink-0"><Icons.Globe size={18} /></div>
+                <div className="min-w-0 flex-1"><div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Citizenship</div><div className="text-sm font-bold text-gray-700 truncate">{reg.citizenship || 'Not Specified'}</div></div>
+              </div>
             </div>
           </div>
         </div>
@@ -629,16 +802,21 @@ export default function AdminPortal() {
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4 lg:mb-6">Academic Background</p>
               <div className="space-y-4">
                 <div className="flex justify-between items-center gap-2"><span className="text-[11px] lg:text-sm font-bold text-gray-500">Qualification</span><span className="text-[11px] lg:text-sm font-black text-gray-900 text-right">{reg.qualification || '—'}</span></div>
-                <div className="flex justify-between items-center gap-2"><span className="text-[11px] lg:text-sm font-bold text-gray-500">Current Course</span><span className="text-[11px] lg:text-sm font-black text-gray-900 text-right">{reg.currentCourse || '—'}</span></div>
-                <div className="flex justify-between items-center gap-2"><span className="text-[11px] lg:text-sm font-bold text-gray-500">Graduation Year</span><span className="text-[11px] lg:text-sm font-black text-gray-900 text-right">{reg.graduationYear || '—'}</span></div>
+                <div className="flex justify-between items-center gap-2"><span className="text-[11px] lg:text-sm font-bold text-gray-500">Year / Grade</span><span className="text-[11px] lg:text-sm font-black text-gray-900 text-right">{reg.academicYear} | {reg.academicGrade || '—'}</span></div>
+                <div className="flex justify-between items-center gap-2"><span className="text-[11px] lg:text-sm font-bold text-gray-500">Work Experience</span><span className={`text-[11px] lg:text-sm font-black text-right ${reg.hasWorkExp === 'Yes' ? 'text-emerald-600' : 'text-gray-400'}`}>{reg.hasWorkExp}</span></div>
               </div>
             </div>
             <div className="bg-white p-8 lg:p-10 rounded-[2rem] lg:rounded-[3rem] border border-gray-100 shadow-sm">
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4 lg:mb-6">Target Application</p>
               <div className="space-y-4">
-                <div className="flex justify-between items-center gap-2"><span className="text-[11px] lg:text-sm font-bold text-gray-500">Program</span><span className="text-[11px] lg:text-sm font-black text-blue-600 text-right">{reg.programName || '—'}</span></div>
-                <div className="flex justify-between items-center gap-2"><span className="text-[11px] lg:text-sm font-bold text-gray-500">Subject</span><span className="text-[11px] lg:text-sm font-black text-gray-900 text-right">{reg.subject || '—'}</span></div>
-                <div className="flex justify-between items-center gap-2"><span className="text-[11px] lg:text-sm font-bold text-gray-500">University</span><span className="text-[11px] lg:text-sm font-black text-gray-900 text-right">{reg.universityName || '—'}</span></div>
+                <div className="flex justify-between items-center gap-2"><span className="text-[11px] lg:text-sm font-bold text-gray-500">Study Level</span><span className="text-[11px] lg:text-sm font-black text-blue-600 text-right">{reg.studyLevel || '—'}</span></div>
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-[11px] lg:text-sm font-bold text-gray-500">Destinations</span>
+                  <div className="flex flex-wrap gap-1 justify-end">
+                    {reg.destinations?.map((d: string) => <span key={d} className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[8px] font-black rounded uppercase">{d}</span>)}
+                  </div>
+                </div>
+                <div className="flex justify-between items-center gap-2"><span className="text-[11px] lg:text-sm font-bold text-gray-500">Current Residence</span><span className="text-[11px] lg:text-sm font-black text-gray-900 text-right">{reg.residence || '—'}</span></div>
               </div>
             </div>
           </div>
@@ -647,15 +825,15 @@ export default function AdminPortal() {
             <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-6">Language Proficiency & Status</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-10">
               <div>
-                <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest mb-1">Language Test</div>
-                <div className="text-base lg:text-lg font-black text-gray-900">{reg.languageTest || 'None'}</div>
+                <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest mb-1">English Test</div>
+                <div className="text-base lg:text-lg font-black text-gray-900">{reg.englishTest || 'Not Taken'}</div>
               </div>
               <div>
                 <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest mb-1">Score</div>
-                <div className="text-base lg:text-lg font-black text-blue-600">{reg.score || '—'}</div>
+                <div className="text-base lg:text-lg font-black text-blue-600">{reg.englishScore || '—'}</div>
               </div>
               <div>
-                <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest mb-1">Date Applied</div>
+                <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest mb-1">Applied On</div>
                 <div className="text-base lg:text-lg font-black text-gray-900">{new Date(reg.createdAt).toLocaleDateString()}</div>
               </div>
             </div>
@@ -671,7 +849,7 @@ export default function AdminPortal() {
                 <p className="text-[9px] font-black uppercase tracking-widest text-white/40">Administrative Strategy</p>
               </div>
               <p className="text-lg lg:text-xl font-bold leading-relaxed italic opacity-80 mb-8">
-                Review candidate's academic eligibility against {reg.universityName || 'target institutional'} standards and initiate admission protocol.
+                Review candidate's academic eligibility ({reg.qualification}) and English proficiency ({reg.englishTest}) for {reg.studyLevel} in {reg.destinations?.[0] || 'Global Institutions'}.
               </p>
             </div>
           </div>
@@ -701,9 +879,9 @@ export default function AdminPortal() {
         {/* Profile Card */}
         <div className="w-full lg:w-4/12 bg-white rounded-[2.5rem] lg:rounded-[3.5rem] p-8 lg:p-10 border border-gray-100 shadow-sm">
           <div className="w-20 h-20 lg:w-24 h-24 bg-orange-600 text-white rounded-[1.5rem] lg:rounded-[2rem] flex items-center justify-center text-2xl lg:text-3xl font-black mb-6 lg:mb-8 shadow-xl shadow-orange-100 mx-auto lg:mx-0">
-            {con.name?.charAt(0)}
+            {(con.studentName || con.name)?.charAt(0)}
           </div>
-          <h2 className="text-2xl lg:text-3xl font-black text-gray-900 tracking-tighter italic mb-2 text-center lg:text-left">{con.name}</h2>
+          <h2 className="text-2xl lg:text-3xl font-black text-gray-900 tracking-tighter italic mb-2 text-center lg:text-left">{con.studentName || con.name}</h2>
           <p className="text-[10px] font-black text-orange-600 uppercase tracking-[0.2em] mb-8 text-center lg:text-left">Inquiry Intelligence Case</p>
 
           <div className="space-y-5 lg:space-y-6">
@@ -713,11 +891,11 @@ export default function AdminPortal() {
             </div>
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 shrink-0"><Icons.Phone size={18} /></div>
-              <div className="min-w-0 flex-1"><div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Mobile</div><div className="text-sm font-bold text-gray-700 truncate">{con.mobile}</div></div>
+              <div className="min-w-0 flex-1"><div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Mobile</div><div className="text-sm font-bold text-gray-700 truncate">{con.phone || con.mobile}</div></div>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 shrink-0"><Icons.Globe size={18} /></div>
-              <div className="min-w-0 flex-1"><div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Country</div><div className="text-sm font-bold text-gray-700 truncate">{con.country}</div></div>
+              <div className="min-w-0 flex-1"><div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">Consultant</div><div className="text-sm font-bold text-gray-700 truncate">{con.consultant || 'Academic Team'}</div></div>
             </div>
           </div>
         </div>
@@ -747,17 +925,43 @@ export default function AdminPortal() {
             </div>
           </div>
 
+          <div className="bg-white p-8 lg:p-10 rounded-[2rem] lg:rounded-[3rem] border border-gray-100 shadow-sm relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:scale-110 transition-transform duration-700">
+              <Icons.FileText size={100} />
+            </div>
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-6">Student Narrative / Message</p>
+            <div className="bg-gray-50/50 rounded-2xl p-6 lg:p-8 border border-gray-100 italic text-gray-600 leading-relaxed relative z-10">
+              "{con.message || 'No additional message provided by the student.'}"
+            </div>
+            <div className="mt-8 flex flex-col sm:flex-row gap-4">
+              <a
+                href={`https://wa.me/${(con.phone || con.mobile || "").replace(/[^0-9]/g, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 flex items-center justify-center gap-3 px-8 py-5 bg-[#25D366] text-white text-[11px] font-black uppercase tracking-widest rounded-2xl hover:bg-[#128C7E] hover:-translate-y-1 transition-all shadow-xl shadow-green-100"
+              >
+                <Icons.Phone size={18} /> Contact on WhatsApp
+              </a>
+              <a
+                href={`mailto:${con.email}`}
+                className="flex-1 flex items-center justify-center gap-3 px-8 py-5 bg-white border border-gray-100 text-gray-900 text-[11px] font-black uppercase tracking-widest rounded-2xl hover:bg-gray-50 hover:-translate-y-1 transition-all shadow-sm"
+              >
+                <Icons.Mail size={18} /> Send Official Email
+              </a>
+            </div>
+          </div>
+
           <div className="bg-orange-600 p-8 lg:p-10 rounded-[2rem] lg:rounded-[3rem] text-white shadow-2xl relative overflow-hidden group">
             <div className="absolute -bottom-10 -right-10 opacity-10 group-hover:scale-110 transition-transform duration-700">
-              <Icons.Phone size={200} />
+              <Icons.ShieldCheck size={200} />
             </div>
             <div className="relative z-10">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                <p className="text-[9px] font-black uppercase tracking-widest text-white/60">Expert Analysis Required</p>
+                <p className="text-[9px] font-black uppercase tracking-widest text-white/60">Expert Analysis Protocol</p>
               </div>
               <p className="text-lg lg:text-xl font-bold leading-relaxed italic mb-8">
-                Initiate student consultation protocol for "{con.subject}". Verify academic background and match with partner institutional portfolios in {con.country}.
+                Consultation Strategy: Analyze student's interest in "{con.subject}". Cross-reference academic eligibility and initiate institutional matching protocol.
               </p>
             </div>
           </div>
@@ -852,10 +1056,11 @@ export default function AdminPortal() {
               >
                 {columns.map(c => (
                   <td key={c} className="px-8 py-6 text-sm font-bold text-gray-700">
-                    {c.toLowerCase() === 'name' || c.toLowerCase() === 'full name' ? item.name || item.fullName :
+                    {c.toLowerCase() === 'name' || c.toLowerCase() === 'full name' ? item.studentName || item.fullName || item.name :
                       c.toLowerCase() === 'title' ? item.title :
-                        c.toLowerCase() === 'status' ? <span className={`px-3 py-1 rounded-lg text-[10px] ${item.status === 'Upcoming' ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-400'}`}>{item.status}</span> :
-                          String(item[c.toLowerCase().replace(' ', '')] || item[c.toLowerCase()] || '-').slice(0, 30)}
+                        c.toLowerCase() === 'mobile' || c.toLowerCase() === 'phone' ? item.phone || item.mobile :
+                          c.toLowerCase() === 'status' ? <span className={`px-3 py-1 rounded-lg text-[10px] ${item.status === 'Confirmed' || item.status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-400'}`}>{item.status}</span> :
+                            String(item[c.toLowerCase().replace(' ', '')] || item[c.toLowerCase()] || '-').slice(0, 30)}
                   </td>
                 ))}
               </tr>
@@ -982,6 +1187,79 @@ export default function AdminPortal() {
     </div>
   );
 
+  const ServicesView = () => (
+    <div className="space-y-6 animate-in fade-in duration-500">
+      <div className="flex justify-between items-center">
+        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+          Active Portfolio: <span className="text-blue-600">{services.length}</span> Premium Services
+        </p>
+        <button
+          onClick={openNewService}
+          className="px-8 py-4 bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl shadow-xl shadow-blue-100 flex items-center justify-center gap-3 hover:scale-105 transition-all shrink-0"
+        >
+          <Icons.Plus size={18} /> Deploy New Service
+        </button>
+      </div>
+
+      <div className="bg-white rounded-[1.5rem] lg:rounded-[2.5rem] border border-gray-100 overflow-hidden shadow-sm overflow-x-auto">
+        <table className="w-full text-left min-w-[800px]">
+          <thead className="bg-gray-50 border-b border-gray-100">
+            <tr>
+              <th className="px-6 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Visual</th>
+              <th className="px-6 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Service Identification</th>
+              <th className="px-6 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Highlights</th>
+              <th className="px-6 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Status</th>
+              <th className="px-6 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Operations</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-50">
+            {services.map(ser => {
+              const IconComp = (Icons as any)[ser.icon] || Icons.Globe;
+              return (
+                <tr key={ser._id} className="hover:bg-blue-50/30 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className={`w-12 h-12 bg-gradient-to-br ${ser.color} rounded-xl flex items-center justify-center text-white shadow-lg`}>
+                      <IconComp size={20} />
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="text-sm font-black text-gray-900">{ser.title}</div>
+                    <div className="text-[10px] text-gray-400 mt-0.5 line-clamp-1">{ser.description}</div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex flex-wrap gap-1">
+                      {ser.features?.slice(0, 2).map((f: string, idx: number) => (
+                        <span key={idx} className="px-2 py-0.5 bg-gray-100 text-gray-500 text-[8px] font-black uppercase rounded tracking-tighter">{f}</span>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${ser.status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
+                      {ser.status || 'Active'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2 justify-end">
+                      <button onClick={() => setEditingService({ ...ser })} className="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-all"><Icons.Edit size={14} /></button>
+                      <button onClick={() => handleDeleteService(ser._id, ser.title)} className="p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all"><Icons.Trash size={14} /></button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+            {services.length === 0 && (
+              <tr>
+                <td colSpan={5} className="py-20 text-center">
+                  <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest">No Services Configured</p>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
   // ── LOADING & AUTH SCREENS ─────────────────────
   if (loading) return (
     <div className="min-h-screen bg-[#0f172a] flex items-center justify-center p-6">
@@ -1023,7 +1301,7 @@ export default function AdminPortal() {
   );
 
   // ── MAIN LAYOUT ───────────────────────────────
-  const tabs = ["Summary", "Registrations", "Consultations", "Events", "Universities"] as const;
+  const tabs = ["Summary", "Registrations", "Consultations", "Events", "Universities", "Services"] as const;
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
@@ -1062,6 +1340,7 @@ export default function AdminPortal() {
               {tab === "Consultations" && <Icons.Phone size={18} />}
               {tab === "Events" && <Icons.Calendar size={18} />}
               {tab === "Universities" && <Icons.GraduationCap size={18} />}
+              {tab === "Services" && <Icons.Briefcase size={18} />}
               {tab}
             </button>
           ))}
@@ -1088,6 +1367,7 @@ export default function AdminPortal() {
             activeModule !== "Universities" &&
             activeModule !== "Registrations" &&
             activeModule !== "Consultations" &&
+            activeModule !== "Services" &&
             activeModule !== "Events" && (
               <button onClick={() => setIsAdding(true)} className="px-8 py-4 bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl shadow-xl shadow-blue-100 flex items-center justify-center gap-3 hover:scale-105 transition-all">
                 <Icons.Plus size={18} /> New {activeModule.slice(0, -1)}
@@ -1112,19 +1392,20 @@ export default function AdminPortal() {
                 {activeModule === "Registrations" && (
                   <TableView
                     data={registrations}
-                    columns={["Full Name", "Email", "Mobile", "Country", "Program Name"]}
+                    columns={["Full Name", "Email", "Phone", "Citizenship", "Study Level"]}
                     onRowClick={(item) => setSelectedRegistration(item)}
                   />
                 )}
                 {activeModule === "Consultations" && (
                   <TableView
                     data={consultations}
-                    columns={["Name", "Email", "Mobile", "Country", "Status"]}
+                    columns={["Name", "Email", "Phone", "Subject", "Status"]}
                     onRowClick={(item) => setSelectedConsultation(item)}
                   />
                 )}
                 {activeModule === "Events" && <EventsView />}
                 {activeModule === "Universities" && <UniversitiesView />}
+                {activeModule === "Services" && <ServicesView />}
               </div>
             )}
           </>
@@ -1147,6 +1428,15 @@ export default function AdminPortal() {
         isUploading={isUploading}
         uploadToImgBB={uploadToImgBB}
         eventSaving={eventSaving}
+      />
+
+      <ServiceEditModal
+        editingService={editingService}
+        setEditingService={setEditingService}
+        handleSaveService={handleSaveService}
+        isUploading={isUploading}
+        uploadToImgBB={uploadToImgBB}
+        serviceSaving={serviceSaving}
       />
     </div>
   );

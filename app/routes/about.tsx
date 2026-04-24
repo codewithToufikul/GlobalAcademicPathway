@@ -1,5 +1,6 @@
 import React from "react";
 import * as Icons from "../components/Icons";
+import { Link } from "react-router";
 
 export function meta() {
   return [
@@ -200,17 +201,17 @@ export default function About() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
               <a
-                href="/registration"
+                to="/registration"
                 className="px-16 py-7 bg-white text-blue-600 font-black rounded-3xl shadow-2xl hover:bg-gray-50 transition-all duration-500 uppercase tracking-widest text-[10px] hover:scale-105"
               >
                 Initiate Deployment
               </a>
-              <a
-                href="/contact"
+              <Link
+                to="/apply"
                 className="px-16 py-7 bg-white/10 border border-white/20 text-white font-black rounded-3xl hover:bg-white/20 transition-all duration-500 uppercase tracking-widest text-[10px]"
               >
                 Consultation Nodes
-              </a>
+              </Link>
             </div>
           </div>
         </div>

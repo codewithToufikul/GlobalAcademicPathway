@@ -89,7 +89,7 @@ function RequirementsModal({ service, onClose }: { service: any; onClose: () => 
       />
 
       {/* Modal Content */}
-      <div className="relative bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2.5rem] shadow-2xl animate-in zoom-in-95 duration-300">
+      <div className="relative bg-white w-full max-w-2xl max-h-[90vh] mt-24 overflow-y-auto rounded-[2.5rem] shadow-2xl animate-in zoom-in-95 duration-300">
         {/* Header */}
         <div className={`p-8 lg:p-10 bg-gradient-to-br ${service.color} text-white relative`}>
           <button
@@ -638,12 +638,12 @@ export default function Home() {
           </div>
 
           <div className="mt-10 text-center">
-            <a
-              href="#contact"
+            <Link
+              to="/universities"
               className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 border-b-2 border-blue-200 hover:border-blue-500 pb-0.5 transition-all duration-200"
             >
-              View All 500+ Partner Universities →
-            </a>
+              View All 100+ Partner Universities →
+            </Link>
           </div>
         </div>
       </section>

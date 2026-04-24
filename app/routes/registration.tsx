@@ -39,13 +39,41 @@ export default function Registration() {
     englishScore: "",
     hasEnglishCert: true,
     hasWorkExp: "No",
+    workExperienceDetails: "",
     verified: false,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 5));
+  const isStepValid = () => {
+    if (currentStep === 1) {
+      return formData.fullName && formData.email && formData.phone && formData.citizenship;
+    }
+    if (currentStep === 2) {
+      return formData.destinations.length > 0 && formData.studyLevel;
+    }
+    if (currentStep === 3) {
+      return formData.qualification && formData.academicYear && formData.academicGrade;
+    }
+    if (currentStep === 4) {
+      if (!formData.hasEnglishCert) return true;
+      return formData.englishTest && formData.englishScore;
+    }
+    if (currentStep === 5) {
+      const workValid = formData.hasWorkExp === "No" || (formData.hasWorkExp === "Yes" && formData.workExperienceDetails);
+      return workValid && formData.verified;
+    }
+    return true;
+  };
+
+  const nextStep = () => {
+    if (!isStepValid()) {
+      alert("Please fill in all required fields to proceed.");
+      return;
+    }
+    setCurrentStep((prev) => Math.min(prev + 1, 5));
+  };
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
 
   const handleSubmit = async () => {
@@ -366,25 +394,28 @@ export default function Registration() {
                       <div>
                         <label className="block text-sm font-bold text-gray-700 mb-2">English Proficiency Test</label>
                         <select
+                          disabled={!formData.hasEnglishCert}
                           value={formData.englishTest}
                           onChange={(e) => setFormData({ ...formData, englishTest: e.target.value })}
-                          className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all outline-none text-gray-600"
+                          className={`w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all outline-none text-gray-600 ${!formData.hasEnglishCert ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                           <option value="">Select an option</option>
                           <option value="IELTS">IELTS</option>
                           <option value="TOEFL">TOEFL</option>
                           <option value="PTE">PTE</option>
                           <option value="Duolingo">Duolingo</option>
+                          <option value="Others">Others</option>
                         </select>
                       </div>
                       <div>
                         <label className="block text-sm font-bold text-gray-700 mb-2">Score</label>
                         <input
+                          disabled={!formData.hasEnglishCert}
                           type="text"
-                          placeholder="e.g. 7.5"
-                          value={formData.englishScore}
+                          placeholder={formData.hasEnglishCert ? "e.g. 7.5" : "N/A"}
+                          value={formData.hasEnglishCert ? formData.englishScore : ""}
                           onChange={(e) => setFormData({ ...formData, englishScore: e.target.value })}
-                          className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all outline-none"
+                          className={`w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all outline-none ${!formData.hasEnglishCert ? 'opacity-50 cursor-not-allowed' : ''}`}
                         />
                       </div>
                       <label className="flex items-center gap-3 cursor-pointer group">
@@ -412,6 +443,18 @@ export default function Registration() {
                           <option value="Yes">Yes</option>
                         </select>
                       </div>
+
+                      {formData.hasWorkExp === "Yes" && (
+                        <div className="animate-in zoom-in-95 duration-300">
+                          <label className="block text-sm font-bold text-gray-700 mb-2">Work Experience Details <span className="text-red-500">*</span></label>
+                          <textarea
+                            placeholder="Please describe your professional history..."
+                            value={formData.workExperienceDetails}
+                            onChange={(e) => setFormData({ ...formData, workExperienceDetails: e.target.value })}
+                            className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all outline-none min-h-[120px] resize-none"
+                          />
+                        </div>
+                      )}
 
                       {/* Professional reCAPTCHA Mock */}
                       <div className="group">
@@ -469,9 +512,6 @@ export default function Registration() {
                   </button>
 
                   <div className="flex items-center gap-4">
-                    {currentStep < 5 && (
-                      <button type="button" onClick={nextStep} className="text-xs font-bold text-gray-400 hover:text-blue-600 transition-colors">Skip &gt;</button>
-                    )}
                     <button
                       type="button"
                       onClick={currentStep === 5 ? handleSubmit : nextStep}

@@ -6,6 +6,7 @@ export default [
   route("universities", "routes/universities.tsx"),
   route("about", "routes/about.tsx"),
   route("registration", "routes/registration.tsx"),
+  route("services/:id", "routes/services.$id.tsx"),
   route("services", "routes/services.tsx"),
   route("contact", "routes/contact.tsx"),
   route("admin", "routes/admin.tsx"),
