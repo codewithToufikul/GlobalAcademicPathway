@@ -758,7 +758,7 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
                 <a
                   id="cta-book-btn"
-                  href="mailto:info@info@globalacademicpathway.org.com"
+                  href="mailto:info@info@globalacademicpathway.co.uk.com"
                   className="px-8 py-4 bg-white text-blue-700 font-bold rounded-xl hover:bg-blue-50 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 text-sm flex items-center justify-center gap-2"
                 >
                   <Icons.Mail size={18} /> Email Us Now

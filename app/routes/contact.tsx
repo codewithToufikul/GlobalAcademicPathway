@@ -97,7 +97,7 @@ export default function ContactPage() {
                            </div>
                            <h4 className="text-xl font-bold text-gray-900 group-hover:text-white mb-2 transition-colors">Email Us</h4>
                            <p className="text-gray-500 group-hover:text-blue-100 text-sm transition-colors">
-                              info@globalacademicpathway.org
+                              info@globalacademicpathway.co.uk
                            </p>
                         </div>
 

@@ -134,7 +134,7 @@ export default function Footer() {
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="text-blue-400 mt-0.5 shrink-0"><Icons.Mail size={16} /></span>
-                  <span className="text-sm text-gray-500">info@globalacademicpathway.org</span>
+                  <span className="text-sm text-gray-500">info@globalacademicpathway.co.uk</span>
                 </div>
               </li>
             </ul>
